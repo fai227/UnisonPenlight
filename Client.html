@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=320,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" href="http://hayato227.html.xdomain.jp/Live/USP.ico">
+  <link rel="apple-touch-icon" href="http://hayato227.html.xdomain.jp/Live/apple-touch-icon.png" sizes="180x180">　
+  <title></title>
+</head>
+<style>
+  button {}
+
+  input {}
+
+  .waku {
+    border: black 2px solid;
+    margin: 2px;
+  }
+
+  .log {
+    border: black 1px solid;
+    margin: 2px;
+  }
+
+  #container {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+  }
+
+
+  .setting {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgb(112, 112, 112);
+    border-radius: 15px;
+  }
+</style>
+
+<body>
+  <div id="container">
+    <div id="main">
+      <h3>Unison Penlight Client By <a href="https://twitter.com/fai_arpeggio" target="blank">Fai</a></h2>
+        <div class="waku">
+          <h4>接続先</h4>
+          <input type="text" id="ip">
+          <button onclick="start()">接続する</button>
+
+        </div>
+
+
+        <div class="waku">
+          <h4>ログ</h4>
+          <div class="log"><span id="log"></span><br><br></div>
+        </div>
+
+        <div class="waku">
+          <h4>製作者から</h4>
+          <p>フルスクリーン対応に頑張って対応させます(´;ω;｀)</p>
+        </div>
+
+        <div class="waku">
+          <h4>フルスクリーンにする方法</h4>
+          <div class="waku">
+            <h5>androidの場合</h5>
+            <p>接続と同時に自動で全画面に切り替わります。</p>
+          </div>
+          <div class="waku">
+            <h5>iOSの場合</h5>
+            <p>下の共有マークから、「ホーム画面に追加」</p>
+            <p>好きな名前を付けて、追加する。</p>
+            <p>ホーム画面にアイコンが出来るので、それを開けば全画面のはずです。</p>
+          </div>
+          <div class="waku">
+            <h5>もしうまくいかない場合</h5>
+            <p>作成者のファイにDMでもなんでもいいので、フルスクリーンに出来なかった機種を教えて下さい。
+            </p>
+          </div>
+        </div>
+
+
+
+    </div>
+    <button id="setting" class="setting" onclick="setting();">※</button>
+  </div>
+
+
+  <script>
+    let nowColor = "#ffffff";
+    let targetColor = "#ffffff";
+    let ip;
+    let connection = "";
+
+    let fadeMode = false;
+
+    let BPM = 120;
+
+    function start() {
+      ip = "ws://" + document.getElementById("ip").value + ":5001";
+      startConnection();
+    }
+
+    function startConnection() {
+      try {
+        connection = new WebSocket(ip);
+      } catch (e) {
+        log("接続できませんでした。");
+        return;
+      }
+
+      //connection = new WebSocket("ws://192.168.137.1:5001");
+      //connection = new WebSocket('ws://192.168.10.105:6000');
+
+      connection.onopen = function (e) {
+        log("接続が完了しました。");
+        setting();
+        document.body.requestFullscreen();
+      }
+
+      connection.onmessage = function (e) {
+
+        let msg = "メッセージを受信しました。" + e.data;
+
+        log(msg);
+
+        let tmpMsg = e.data + "";
+        if (tmpMsg.slice(0, 1) == "#") {
+          //色情報を取得
+          targetColor = e.data;
+        } else if (tmpMsg.slice(0, 1) == "&") {
+          //BPMを取得
+          BPM = tmpMsg.slice(1);
+        } else if (tmpMsg.slice(0, 1) == "$") {
+          //フェードモードを取得
+          fadeMode = tmpMsg.slice(1) == "true";
+        }
+
+        console.log(msg);
+      };
+
+      connection.onerror = function (error) {
+        log("エラーが発生しました。");
+      }
+    }
+
+    function changeColor() {
+      if (fadeMode == true) {
+        let changeDifference = 256 * BPM / 60 / 60;
+        let nowColorRGB = {
+          r: parseInt(nowColor.substr(1, 2), 16),
+          g: parseInt(nowColor.substr(3, 2), 16),
+          b: parseInt(nowColor.substr(5, 2), 16)
+        }
+
+        let targetColorRGB = {
+          r: parseInt(targetColor.substr(1, 2), 16),
+          g: parseInt(targetColor.substr(3, 2), 16),
+          b: parseInt(targetColor.substr(5, 2), 16)
+        }
+
+        if (Math.abs(targetColorRGB.r - nowColorRGB.r) <= changeDifference) {
+          nowColorRGB.r = targetColorRGB.r;
+        } else if (targetColorRGB.r > nowColorRGB.r) {
+          nowColorRGB.r += changeDifference;
+        } else if (targetColorRGB.r < nowColorRGB.r) {
+          nowColorRGB.r -= changeDifference;
+        }
+
+        if (Math.abs(targetColorRGB.g - nowColorRGB.g) <= changeDifference) {
+          nowColorRGB.g = targetColorRGB.g;
+        } else if (targetColorRGB.g > nowColorRGB.g) {
+          nowColorRGB.g += changeDifference;
+        } else if (targetColorRGB.g < nowColorRGB.g) {
+          nowColorRGB.g -= changeDifference;
+        }
+
+        if (Math.abs(targetColorRGB.b - nowColorRGB.b) <= changeDifference) {
+          nowColorRGB.b = targetColorRGB.b;
+        } else if (targetColorRGB.b > nowColorRGB.b) {
+          nowColorRGB.b += changeDifference;
+        } else if (targetColorRGB.b < nowColorRGB.b) {
+          nowColorRGB.b -= changeDifference;
+        }
+
+        let tmpR = Math.round(nowColorRGB.r).toString(16);
+        let tmpG = Math.round(nowColorRGB.g).toString(16);
+        let tmpB = Math.round(nowColorRGB.b).toString(16);
+
+        if (tmpR.length < 2) {
+          tmpR = "0" + tmpR;
+        }
+
+        if (tmpG.length < 2) {
+          tmpG = "0" + tmpG;
+        }
+
+        if (tmpB.length < 2) {
+          tmpB = "0" + tmpB;
+        }
+
+        nowColor = "#" + tmpR + tmpG + tmpB;
+      } else {
+        nowColor = targetColor;
+      }
+
+      //console.log(nowColor);
+      document.body.bgColor = nowColor;
+      document.getElementById("container").style.backgroundColor = nowColor;
+      document.getElementById("setting").style.backgroundColor = nowColor;
+    }
+    setInterval(changeColor, 1000 / 60);
+
+    function snd_msg() {
+
+      connection.send("test");
+
+    }
+
+    if (location.search != "") {
+      document.getElementById("ip").value = getParam("ip").split(":")[0];
+    }
+    document.getElementById("setting").style.display = "none";
+    //document.getElementById("container").style.height = document.body.clientHeight + "px";
+
+    function getParam(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    function log(text) {
+      if (document.getElementById("log").innerHTML == "") {
+        document.getElementById("log").innerHTML += text;
+      } else {
+        document.getElementById("log").innerHTML += "<br>" + text;
+      }
+    }
+
+    let settingMode = true;
+    function setting() {
+      if (settingMode) {
+        //非表示
+        settingMode = false;
+        document.getElementById("main").style.display = "none";
+        document.getElementById("setting").style.display = "inline";
+      } else {
+        //表示
+        if (document.URL.slice(-5) != ":5001") {
+          location.href = document.URL + "?ip=" + document.getElementById("ip").value + ":5001"
+        } else {
+          location.reload();
+        }
+      }
+    }
+
+  </script>
+</body>
+
+</html>
