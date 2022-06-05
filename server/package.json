@@ -1,0 +1,46 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "build": {
+    "appId": "com.electron.USP",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "node_modules",
+      "index.html",
+      "index.js",
+      "package.json",
+      "package-lock.json",
+      "qrcode.js",
+      "Server.js",
+      "style.css",
+      "USP.ico"
+    ],
+    "win": {
+      "icon": "USP.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "description": "",
+  "main": "Server.js",
+  "scripts": {
+    "start": "electron .",
+    "build64": "electron-packager . UPS64 --platform=win32 --arch=x64 --overwrite",
+    "build32": "electron-packager . UPS32 --platform=win32 --arch=ia32 --overwrite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.3.0"
+  },
+  "devDependencies": {
+    "electron": "^16.0.4",
+    "electron-packager": "^15.4.0"
+  }
+}

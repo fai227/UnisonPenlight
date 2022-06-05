@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sample</title>
+</head>
+
+<body>
+
+    <script type="text/javascript" src="qrcode.js"></script>
+
+    <div class="title">
+        <p><b>Unison Penlight Server By <a href="https://twitter.com/fai_arpeggio" target="blank">Fai</a></b></p>
+    </div>
+    <div class="networkInformation">
+        <div class="waku">
+            <p style="text-align: center;"><b>インターネット設定</b></p>
+        </div>
+        <div class="waku">
+            <p><b>接続先IPアドレス</b>：<span id="ipAddress">未設定</span></p>
+            <p><b>接続状況</b>：<span id="connectionNumber">接続待機中</span></p>
+        </div>
+        <div class="waku">
+            <p><b>このPCが持つIPアドレス一覧</b>（どれかをチェックしてください）</p>
+            <p id="spanForIpAddress"></p>
+        </div>
+    </div>
+    <div class="lightInformation">
+        <div class="waku2">
+            <p style="text-align: center;"><b>ペンライト設定</b></p>
+        </div>
+        <div class="waku2">
+            <p><b>ループ</b>：<input type="checkbox" onchange="changeLoopMode(this)"></p>
+            <p><b>フェード</b>：<input type="checkbox" onchange="changeFadeMode(this)"></p>
+            <p><b>フェードBPM</b>：<input type="number" id="BPM" onchange="changeBPM()" value="120" style="width: 50px;"></p>
+        </div>
+        <div class="waku2">
+            <p><b>現在の色</b>：<span id="nowColorMihon">　　</span>　　<b>色を変更</b>：<input type="color" onchange="paletteColor()"
+                    id="color">　　<input type="text" id="paste" onchange="loadPalette()">    
+            </p>
+        </div>
+    </div>
+    <div class="penlightInformation" id="palette"></div>
+    <div class="colorInformation">
+        <div class="waku3">
+            <p style="text-align: center;"><b>接続設定</b></p>
+        </div>
+        <div class="waku3">
+            <p><b>モード選択</b>：</p>
+            <p><input type="radio" name="onlineMode" onchange="changeOnlineMode('online')" selected>オンライン<input
+                    type="radio" name="onlineMode" onchange="changeOnlineMode('offline')">オフライン</p>
+        </div>
+        <div class="waku3">
+            <p><b>接続先URL</b>：</p>
+            <p id="url" style="word-wrap: break-word;"></p>
+        </div>
+        <div class="waku3">
+            <p><b>QRコード</b>：</p>
+            <div id="qrcode"></div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="index.js"></script>
+
+
+</body>
+
+</html>

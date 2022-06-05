@@ -1,0 +1,87 @@
+.title {
+    border: 2px black solid;
+    height: 50px;
+    margin: 2px;
+    text-align: center;
+    
+}
+
+.networkInformation {
+    border: 2px black solid;
+    width: 605px;
+    margin: 2px;
+    float: left;
+    font-size: small;
+}
+
+.penlightInformation {
+    border: 2px black solid;
+    width: 910px;
+    float: left;
+    margin: 2px;
+    text-align: center;
+    line-height: 116px;
+    -webkit-user-select: none; 
+}
+
+.lightInformation {
+    border: 2px black solid;
+    width: 605px;
+    margin: 2px;
+    float: right;
+    font-size: small;
+}
+
+.colorInformation {
+    border: 2px black solid;
+    width: 310px;
+    height: 570px;
+    float: right;
+    margin: 2px;
+    font-size: small;
+}
+
+.palette {
+    border: 1px black solid;
+    font-size: 30px;
+    text-align: center;
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-text-stroke: 1px #FFF;
+    text-stroke: 1px #FFF;
+}
+
+.waku {
+    padding: 0.5em 1em;
+    margin: 3px 3px;
+    border: double 5px #ffbb7b;
+}
+
+.waku p {
+    margin: 0; 
+    padding: 0;
+}
+
+.waku2 {
+    padding: 0.5em 1em;
+    margin: 3px 3px;
+    border: double 5px #7bfbff;
+}
+
+.waku2 p {
+    margin: 0; 
+    padding: 0;
+}
+
+.waku3 {
+    padding: 0.5em 1em;
+    margin: 3px 3px;
+    border: double 5px #7bff91;
+}
+
+.waku3 p {
+    margin: 0; 
+    padding: 0;
+}
